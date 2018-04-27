@@ -22,7 +22,7 @@ public class Main {
                 int output = Math.max(maxVol[i-1], maxVol[i-2] + vals[i]);
                 maxVol[i] = output;
             }
-            System.out.println(Arrays.toString(maxVol));
+            System.out.println(maxVol[maxVol.length-1]);
         }
     }
 
