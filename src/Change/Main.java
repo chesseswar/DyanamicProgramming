@@ -22,6 +22,7 @@ public class Main {
                 }
             }
             print(table);
+            //System.out.println(retrace(table,new HashMap<Integer,Integer>(),coins));
             //System.out.println(table[numCoins-1][goal]);
         }
     }
@@ -49,5 +50,46 @@ public class Main {
             System.out.println(Arrays.toString(arr[i]));
         }
         System.out.println();
+    }
+
+    public static HashMap<Integer,Integer> retrace(int[][] table, HashMap<Integer,Integer> coins, HashMap<Integer,Integer> values){
+        if (table[table.length-1][table[0].length-1] == table[table.length-2][table[0].length-1]){
+            retrace(removeRow(table),coins,values);
+        } else {
+            if (!coins.containsKey(values.get(table.length-1))){
+                coins.put(values.get(table.length-1),1);
+            } else {
+                coins.put(values.get(table.length-1), coins.get(values.get(table.length-1)) + 1);
+            }
+
+            if (table[0].length - values.get(table.length-1) == 0){
+                return coins;
+            }
+
+            retrace(removeCols(table,table[0].length-values.get(table.length-1)),coins,values);
+        }
+
+        return coins;
+    }
+
+    public static int[][] removeCols(int[][] table, int length){
+        int[][] output = new int[table.length][length];
+        for (int i = 0; i < table.length; i++){
+            for (int j = 0; j < length; j++){
+                output[i][j] = table[i][j];
+            }
+        }
+
+        return output;
+    }
+
+    public static int[][] removeRow(int[][] table){
+        int[][] output = new int[table.length-1][table[0].length];
+
+        for (int i = 0; i < table.length-1; i++){
+            output[i] = table[i];
+        }
+
+        return output;
     }
 }
