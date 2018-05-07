@@ -6,11 +6,14 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(new File("input.txt"));
+
         int numCase = in.nextInt();
         while (numCase-- > 0){
             int goal = in.nextInt();
             int numCoins = in.nextInt();
+
             HashMap<Integer,Integer> coins = new HashMap<>();
+
             int[][] table = new int[numCoins][goal+1];
             for (int i = 0; i < numCoins; i++){
                 coins.put(i,in.nextInt());
@@ -21,9 +24,8 @@ public class Main {
                     table = put(table,i,j,coins);
                 }
             }
-            print(table);
-            //System.out.println(retrace(table,new HashMap<Integer,Integer>(),coins));
-            //System.out.println(table[numCoins-1][goal]);
+
+            System.out.println(retrace(table,coins));
         }
     }
 
@@ -32,15 +34,18 @@ public class Main {
             if (col % coins.get(row) == 0){
                 table[row][col] = col / coins.get(row);
             }
+
             return table;
         } else {
             int previous = table[row-1][col];
+
             if (col < coins.get(row)){
                 table[row][col] = previous;
                 return table;
             }
 
             table[row][col] = Integer.min(table[row][col-coins.get(row)] + 1, table[row-1][col]);
+
             return table;
         }
     }
@@ -49,27 +54,34 @@ public class Main {
         for (int i = 0; i < arr.length; i++){
             System.out.println(Arrays.toString(arr[i]));
         }
+
         System.out.println();
     }
 
-    public static HashMap<Integer,Integer> retrace(int[][] table, HashMap<Integer,Integer> coins, HashMap<Integer,Integer> values){
-        if (table[table.length-1][table[0].length-1] == table[table.length-2][table[0].length-1]){
-            retrace(removeRow(table),coins,values);
-        } else {
-            if (!coins.containsKey(values.get(table.length-1))){
-                coins.put(values.get(table.length-1),1);
+    public static HashMap<Integer,Integer> retrace(int[][] table, HashMap<Integer,Integer> coins){
+        int x = table[0].length-1, y = table.length-1;
+
+        HashMap<Integer,Integer> output = new HashMap<>();
+
+        while (x != 0){
+            while (y > 0 && table[y][x] == table[y-1][x]){
+                y--;
+            }
+
+            if (x < 0){
+                return output;
+            }
+
+            if (output.containsKey(coins.get(y))){
+                output.put(coins.get(y),output.get(coins.get(y)) + 1);
             } else {
-                coins.put(values.get(table.length-1), coins.get(values.get(table.length-1)) + 1);
+                output.put(coins.get(y),1);
             }
 
-            if (table[0].length - values.get(table.length-1) == 0){
-                return coins;
-            }
-
-            retrace(removeCols(table,table[0].length-values.get(table.length-1)),coins,values);
+            x -= coins.get(y);
         }
 
-        return coins;
+        return output;
     }
 
     public static int[][] removeCols(int[][] table, int length){
