@@ -20,19 +20,43 @@ public class Main {
                 table[0][i] = i;
             }
 
-            if (first.charAt(0) != second.charAt(0)){
-                table[1][1] = 1;
+            for (int i = 1; i < table.length; i++){
+                for (int j = 1; j < table[0].length; j++) {
+                    table = put(table,i,j,first.substring(0,i),second.substring(0,j));
+                }
             }
 
             print(table);
         }
     }
 
-    public static
+    public static int[][] put(int[][] table, int i, int j, String first, String second){
+        int lastCharMatches;
 
+        if (lastChar(first) == lastChar(second)){
+            lastCharMatches = 0;
+        } else {
+            lastCharMatches = 1;
+        }
 
+        table[i][j] = Math.min(Math.min(table[i-1][j]+1,table[i][j-1]+1),table[i-1][j-1]+lastCharMatches);
 
-    public static void print(int[][] table){
+        return table;
+    }
+
+    public static char lastChar(String str){
+        return str.charAt(str.length()-1);
+    }
+
+    public static ArrayDeque<String> retrace(int[][] table, String first, String second){
+        int x = table[0].length;
+        int y = table.length;
+        while (table[y][x] != 0) {
+            if (y == 0)
+        }
+    }
+
+    public static void print(int[][] table){//}, String first, String second){
         for (int i = 0; i < table.length; i++){
             System.out.println(Arrays.toString(table[i]));
         }
