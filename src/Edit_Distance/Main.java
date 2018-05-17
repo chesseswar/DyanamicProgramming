@@ -26,7 +26,8 @@ public class Main {
                 }
             }
 
-            print(table);
+            System.out.println("Distance: " + table[table.length-1][table[0].length-1]);
+            System.out.println(retrace(table,first,second));
         }
     }
 
@@ -49,11 +50,54 @@ public class Main {
     }
 
     public static ArrayDeque<String> retrace(int[][] table, String first, String second){
-        int x = table[0].length;
-        int y = table.length;
+        ArrayDeque<String> output = new ArrayDeque<>();
+        output.push(first);
+        int x = table[0].length-1;
+        int y = table.length-1;
+        int count = 0;
         while (table[y][x] != 0) {
-            if (y == 0)
+            if (x > 0 && y > 0) {
+                if (y > 0 && table[y-1][x] == table[y][x] - 1){ //subtraction
+                    output.push(delChar(output.peek(),y-1));
+
+                    y--;
+                } else if (y > 0 && x > 0 && table[y-1][x-1] == table[y][x] - 1){ //substitution
+                    output.push(replaceChar(output.peek(),second.charAt(x-1),y-1));
+
+                    x--;
+                    y--;
+                } else if (x > 0 && table[y][x-1] == table[y][x] - 1){ //addition
+                    output.push(insertChar(output.peek(),second.charAt(x-1),y-1));
+
+                    x--;
+                } else {
+                    x--;
+                    y--;
+                }
+            } else if (y == 0 && x > 0){
+                output.push(insertChar(output.peek(),second.charAt(x-1),0));
+
+                x--;
+            } else if (x == 0 && y > 0){
+                output.push(delChar(output.peek(),y-1));
+
+                y--;
+            }
         }
+
+        return output;
+    }
+
+    public static String delChar(String str, int index){
+        return str.substring(0,index) + str.substring(index+1,str.length());
+    }
+
+    public static String insertChar(String str, char newChar, int index){
+        return str.substring(0,index) + Character.toString(newChar) + str.substring(index,str.length());
+    }
+
+    public static String replaceChar(String str, char newChar, int index){
+        return str.substring(0,index) + Character.toString(newChar) + str.substring(index+1,str.length());
     }
 
     public static void print(int[][] table){//}, String first, String second){
