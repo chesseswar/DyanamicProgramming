@@ -9,23 +9,37 @@ public class Main {
 
         int numCase = in.nextInt();
         while (numCase-- > 0){
-            int goal = in.nextInt();
+
             int numCoins = in.nextInt();
 
-            HashMap<Integer,Integer> coins = new HashMap<>();
-
-            int[][] table = new int[numCoins][goal+1];
+            ArrayList<Integer> list = new ArrayList<>();
             for (int i = 0; i < numCoins; i++){
-                coins.put(i,in.nextInt());
+                list.add(in.nextInt());
             }
 
+            HashMap<Integer,Integer> coins = new HashMap<>();
+            int goal = in.nextInt();
+
+            for (int i = 0; i < numCoins; i++){
+                coins.put(i,list.get(i));
+            }
+            int[][] table = new int[numCoins][goal+1];
             for (int i = 0; i < numCoins; i++){
                 for (int j = 1; j <= goal; j++){
                     table = put(table,i,j,coins);
                 }
             }
 
-            System.out.println(retrace(table,coins));
+            HashMap<Integer,Integer> retrace = retrace(table,coins);
+
+            System.out.print(table[numCoins-1][goal] + " ");
+            for (int i = 0; i < list.size(); i++){
+                if (!retrace.containsKey(list.get(i))){
+                    System.out.print("0 ");
+                } else {
+                    System.out.print(retrace.get(list.get(i)) + " ");
+                }
+            }
         }
     }
 
@@ -54,7 +68,6 @@ public class Main {
         for (int i = 0; i < arr.length; i++){
             System.out.println(Arrays.toString(arr[i]));
         }
-
         System.out.println();
     }
 
@@ -79,27 +92,6 @@ public class Main {
             }
 
             x -= coins.get(y);
-        }
-
-        return output;
-    }
-
-    public static int[][] removeCols(int[][] table, int length){
-        int[][] output = new int[table.length][length];
-        for (int i = 0; i < table.length; i++){
-            for (int j = 0; j < length; j++){
-                output[i][j] = table[i][j];
-            }
-        }
-
-        return output;
-    }
-
-    public static int[][] removeRow(int[][] table){
-        int[][] output = new int[table.length-1][table[0].length];
-
-        for (int i = 0; i < table.length-1; i++){
-            output[i] = table[i];
         }
 
         return output;
