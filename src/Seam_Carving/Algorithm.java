@@ -1,5 +1,7 @@
 package Seam_Carving;
 
+//TEST COMMENT
+
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.awt.*;
@@ -36,7 +38,7 @@ public class Algorithm {
         image[y][x].energy = delRx^2 + delGx^2 + delBx^2 + delRy^2 + delGy^2 + delBy^2;
     }
 
-    public int[] computeSeam
+    //public int[] computeSeam
 
     public int mod(int a, int b){
         return (b + a%b)%b;
